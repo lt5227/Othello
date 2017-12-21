@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--日志输出到控制台-->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <immediateFlush>true</immediateFlush>
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+    </appender>
+
+    <!--日志输出到文件-->
+    <!--<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<File>logs/log-day.log</File>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--&lt;!&ndash; daily rollover &ndash;&gt;-->
+            <!--<FileNamePattern>logs/othello-log-day.%d{yyyy-MM-dd}.log</FileNamePattern>-->
+            <!--&lt;!&ndash; keep 30 days' worth of history &ndash;&gt;-->
+            <!--<maxHistory>15</maxHistory>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder>-->
+            <!--<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%.15thread] %-5level %logger{36} - %msg %n</Pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+    <!--&lt;!&ndash;日志输出等级设置&ndash;&gt;-->
+    <!--<root level="INFO">-->
+        <!--<appender-ref ref="dailyRollingFileAppender"/>-->
+    <!--</root>-->
+    <!--<logger name="org.springframework" level="INFO" additivity="false">-->
+        <!--<appender-ref ref="dailyRollingFileAppender"/>-->
+    <!--</logger>-->
+</configuration>
