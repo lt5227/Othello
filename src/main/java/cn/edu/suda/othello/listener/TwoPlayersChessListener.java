@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Copyright 2017 济中节能 All rights reserved.
