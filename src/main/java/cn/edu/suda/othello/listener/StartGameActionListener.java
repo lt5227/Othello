@@ -35,6 +35,7 @@ public class StartGameActionListener implements ActionListener {
             case 1: {
                 // 单人模式
                 logger.info("单人模式游戏开始");
+                loginPanel.setVisible(false); // 开始游戏隐藏登录面板
             }
             break;
             case 2: {

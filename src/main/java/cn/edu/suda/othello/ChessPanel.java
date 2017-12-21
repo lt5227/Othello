@@ -1,7 +1,9 @@
 package cn.edu.suda.othello;
 
 import cn.edu.suda.othello.listener.ChessListener;
+import cn.edu.suda.othello.listener.OnePlayerChessListener;
 import cn.edu.suda.othello.listener.TwoPlayersChessListener;
+import cn.edu.suda.othello.util.pojo.Coordinate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,7 @@ public class ChessPanel extends JPanel {
     private static final JLabel blackCountLabel = new JLabel("2"); // 黑棋个数
     private static final JLabel whiteCountLabel = new JLabel("2"); // 白棋个数
     private static final JLabel record = new JLabel("阿狸下"); // 当前下棋的人 默认黑棋先下
+    private static Coordinate position;
 
     private static final Logger logger = LoggerFactory.getLogger(ChessPanel.class);
 
@@ -114,6 +117,7 @@ public class ChessPanel extends JPanel {
         switch (GameParameter.type) {
             case 1: {
                 logger.info("实例化单人模式监听器");
+                listener = new OnePlayerChessListener(g, record, blackCountLabel, whiteCountLabel, this);
             }
             break;
             case 2: {
@@ -139,17 +143,17 @@ public class ChessPanel extends JPanel {
         // 如果使用 ClassLoader.getSystemResource("filename"); 方法，打包程序后会报错
         Image back = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("image/棋盘.jpg")).getImage();
         g.drawImage(back, 10, 30, 800, 600, null);
-        // 绘制棋盘
-        // 画横线
-        for (int i = 0; i < GameParameter.rows; i++) {
-            g.setColor(Color.BLUE);
-            g.drawLine(x, y + i * size, x + size * (GameParameter.rows - 1), y + i * size);
-        }
-        // 画竖线
-        for (int j = 0; j < GameParameter.cols; j++) {
-            g.setColor(Color.BLUE);
-            g.drawLine(x + j * size, y, x + j * size, y + size * (GameParameter.cols - 1));
-        }
+//        // 绘制棋盘
+//        // 画横线
+//        for (int i = 0; i < GameParameter.rows; i++) {
+//            g.setColor(Color.BLUE);
+//            g.drawLine(x, y + i * size, x + size * (GameParameter.rows - 1), y + i * size);
+//        }
+//        // 画竖线
+//        for (int j = 0; j < GameParameter.cols; j++) {
+//            g.setColor(Color.BLUE);
+//            g.drawLine(x + j * size, y, x + j * size, y + size * (GameParameter.cols - 1));
+//        }
         // 绘制棋子
         for (int i = 0; i < GameParameter.rows - 1; i++) {
             for (int j = 0; j < GameParameter.cols - 1; j++) {
@@ -170,5 +174,24 @@ public class ChessPanel extends JPanel {
                 }
             }
         }
+
+        if (position != null) {
+            int i = position.getX();
+            int j = position.getY();
+            int X = x + size / 2 + size * i;
+            int Y = y + size / 2 + size * j;
+            Graphics2D g2D = (Graphics2D) g;
+            g2D.setStroke(new BasicStroke(5.0f));
+            g.setColor(Color.BLUE);
+            g.drawRect(X - chess_size / 2, Y - chess_size / 2, chess_size, chess_size);
+        }
+    }
+
+    public static Coordinate getPosition() {
+        return position;
+    }
+
+    public static void setPosition(Coordinate position) {
+        ChessPanel.position = position;
     }
 }

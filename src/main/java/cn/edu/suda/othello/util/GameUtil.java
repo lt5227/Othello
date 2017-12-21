@@ -25,14 +25,14 @@ public class GameUtil {
      *
      * @return 黑棋和白棋的数目 数组0：黑棋数目；数组1：白棋数目
      */
-    public static int[] judge() {
+    public static int[] judge(int[][] chessArr) {
         int count[] = new int[2];
         for (int i = 0; i < GameParameter.rows - 1; i++) {
             for (int j = 0; j < GameParameter.cols - 1; j++) {
-                if (GameParameter.chess[i][j] == 1) {
+                if (chessArr[i][j] == 1) {
                     // 统计黑棋数目
                     count[0]++;
-                } else if (GameParameter.chess[i][j] == -1) {
+                } else if (chessArr[i][j] == -1) {
                     // 统计白棋数目
                     count[1]++;
                 }
@@ -48,21 +48,21 @@ public class GameUtil {
      * @param state 要检查的棋的颜色（黑棋：1，白棋：-1）
      * @return 棋盘坐标集合
      */
-    public static List<Coordinate> check(int state) {
+    public static List<Coordinate> check(int state, int[][] chessArr) {
         List<Coordinate> list = new ArrayList<>();
         for (int i = 0; i < GameParameter.rows - 1; i++) {
             for (int j = 0; j < GameParameter.cols - 1; j++) {
-                if (GameParameter.chess[i][j] == 0) {
+                if (chessArr[i][j] == 0) {
                     // 设置当前棋盘位置棋子颜色
-                    GameParameter.chess[i][j] = state;
-                    if (checkTheRight(i, j) != null
-                            || checkTheLeft(i, j) != null
-                            || checkTheUp(i, j) != null
-                            || checkTheDown(i, j) != null
-                            || checkTheBottomLeft(i, j) != null
-                            || checkTheBottomRight(i, j) != null
-                            || checkTheUpperLeft(i, j) != null
-                            || checkTheUpperRight(i, j) != null) {
+                    chessArr[i][j] = state;
+                    if (checkTheRight(i, j, chessArr) != null
+                            || checkTheLeft(i, j, chessArr) != null
+                            || checkTheUp(i, j, chessArr) != null
+                            || checkTheDown(i, j, chessArr) != null
+                            || checkTheBottomLeft(i, j, chessArr) != null
+                            || checkTheBottomRight(i, j, chessArr) != null
+                            || checkTheUpperLeft(i, j, chessArr) != null
+                            || checkTheUpperRight(i, j, chessArr) != null) {
                         // 当前位置可以下子
                         Coordinate coordinate = new Coordinate(i, j);
                         list.add(coordinate);
@@ -78,7 +78,7 @@ public class GameUtil {
     /**
      * 判断棋子是否已满的方法
      */
-    public static boolean full(ChessListener chessListener) {
+    public static boolean full(ChessListener chessListener, int[][] chessArr) {
         int te = chessListener.getTe();
         if (te == 2) {
             // 如果双方都不能下子，则游戏结束
@@ -87,7 +87,7 @@ public class GameUtil {
             for (int i = 0; i < GameParameter.rows - 1; i++) {
                 for (int j = 0; j < GameParameter.cols - 1; j++) {
                     // 如果有一个地方是空的则返回false
-                    if (GameParameter.chess[i][j] == 0) {
+                    if (chessArr[i][j] == 0) {
                         return false;
                     }
                 }
@@ -103,21 +103,21 @@ public class GameUtil {
      * @param y y坐标
      * @return 向右终点的行列坐标，如果没有则返回null
      */
-    public static int[] checkTheRight(int x, int y) {
+    public static int[] checkTheRight(int x, int y, int[][] chessArr) {
         try {
             int r = -2;
             int i;
             // 向右检测
             for (i = x + 1; i < GameParameter.rows - 1; i++) {
-                if (GameParameter.chess[i][y] != 1 && GameParameter.chess[i][y] != -1) {
+                if (chessArr[i][y] != 1 && chessArr[i][y] != -1) {
                     break;
                 }
-                if (GameParameter.chess[i][y] == GameParameter.chess[x][y]) {
+                if (chessArr[i][y] == chessArr[x][y]) {
                     r = i;
                     break;
                 }
             }
-            if (r != -2 && GameParameter.chess[x + 1][y] != GameParameter.chess[i][y]) {
+            if (r != -2 && chessArr[x + 1][y] != chessArr[i][y]) {
                 return new int[]{r, y};
             } else {
                 return null;
@@ -134,21 +134,21 @@ public class GameUtil {
      * @param y y坐标
      * @return 向左终点的行列坐标，如果没有则返回null
      */
-    public static int[] checkTheLeft(int x, int y) {
+    public static int[] checkTheLeft(int x, int y, int[][] chessArr) {
         try {
             int r = -2;
             int i;
             // 向左检测
             for (i = x - 1; i >= 0; i--) {
-                if (GameParameter.chess[i][y] != 1 && GameParameter.chess[i][y] != -1) {
+                if (chessArr[i][y] != 1 && chessArr[i][y] != -1) {
                     break;
                 }
-                if (GameParameter.chess[i][y] == GameParameter.chess[x][y]) {
+                if (chessArr[i][y] == chessArr[x][y]) {
                     r = i;
                     break;
                 }
             }
-            if (r != -2 && GameParameter.chess[x - 1][y] != GameParameter.chess[i][y]) {
+            if (r != -2 && chessArr[x - 1][y] != chessArr[i][y]) {
                 return new int[]{r, y};
             } else {
                 return null;
@@ -165,21 +165,21 @@ public class GameUtil {
      * @param y y坐标
      * @return 向上终点的行列坐标，如果没有则返回null
      */
-    public static int[] checkTheUp(int x, int y) {
+    public static int[] checkTheUp(int x, int y, int[][] chessArr) {
         try {
             int r = -2;
             int i;
             // 向上检测
             for (i = y - 1; i >= 0; i--) {
-                if (GameParameter.chess[x][i] == 0) {
+                if (chessArr[x][i] == 0) {
                     break;
                 }
-                if (GameParameter.chess[x][i] == GameParameter.chess[x][y]) {
+                if (chessArr[x][i] == chessArr[x][y]) {
                     r = i;
                     break;
                 }
             }
-            if (r != -2 && GameParameter.chess[x][y - 1] != GameParameter.chess[x][i]) {
+            if (r != -2 && chessArr[x][y - 1] != chessArr[x][i]) {
                 return new int[]{x, r};
             } else {
                 return null;
@@ -196,21 +196,21 @@ public class GameUtil {
      * @param y y坐标
      * @return 向下终点的行列坐标，如果没有则返回null
      */
-    public static int[] checkTheDown(int x, int y) {
+    public static int[] checkTheDown(int x, int y, int[][] chessArr) {
         try {
             int r = -2;
             int i;
             // 向下检测
             for (i = y + 1; i < GameParameter.rows - 1; i++) {
-                if (GameParameter.chess[x][i] == 0) {
+                if (chessArr[x][i] == 0) {
                     break;
                 }
-                if (GameParameter.chess[x][i] == GameParameter.chess[x][y]) {
+                if (chessArr[x][i] == chessArr[x][y]) {
                     r = i;
                     break;
                 }
             }
-            if (r != -2 && GameParameter.chess[x][y + 1] != GameParameter.chess[x][i]) {
+            if (r != -2 && chessArr[x][y + 1] != chessArr[x][i]) {
                 return new int[]{x, r};
             } else {
                 return null;
@@ -227,21 +227,21 @@ public class GameUtil {
      * @param y y坐标
      * @return 向右上终点的行列坐标，如果没有则返回null
      */
-    public static int[] checkTheUpperRight(int x, int y) {
+    public static int[] checkTheUpperRight(int x, int y, int[][] chessArr) {
         try {
             int r = -2, s = -2;
             int i, j;
             for (i = x + 1, j = y - 1; i < GameParameter.rows - 1 && j >= 0; i++, j--) {
-                if (GameParameter.chess[i][j] == 0) {
+                if (chessArr[i][j] == 0) {
                     break;
                 }
-                if (GameParameter.chess[i][j] == GameParameter.chess[x][y]) {
+                if (chessArr[i][j] == chessArr[x][y]) {
                     r = i;
                     s = j;
                     break;
                 }
             }
-            if (r != -2 && s != -2 && GameParameter.chess[x + 1][y - 1] != GameParameter.chess[i][j]) {
+            if (r != -2 && s != -2 && chessArr[x + 1][y - 1] != chessArr[i][j]) {
                 return new int[]{r, s};
             } else {
                 return null;
@@ -258,20 +258,20 @@ public class GameUtil {
      * @param y y坐标
      * @return 向右下终点的行列坐标，如果没有则返回null
      */
-    public static int[] checkTheBottomRight(int x, int y) {
+    public static int[] checkTheBottomRight(int x, int y, int[][] chessArr) {
         try {
             int r = -2, s = -2;
             int i, j;
             for (i = x + 1, j = y + 1; i < GameParameter.rows - 1 && j < GameParameter.cols - 1; i++, j++) {
-                if (GameParameter.chess[i][j] == 0) {
+                if (chessArr[i][j] == 0) {
                     break;
                 }
-                if (GameParameter.chess[i][j] == GameParameter.chess[x][y]) {
+                if (chessArr[i][j] == chessArr[x][y]) {
                     r = i;
                     s = j;
                 }
             }
-            if (r != -2 && s != -2 && GameParameter.chess[x + 1][y + 1] != GameParameter.chess[i][j]) {
+            if (r != -2 && s != -2 && chessArr[x + 1][y + 1] != chessArr[i][j]) {
                 return new int[]{r, s};
             } else {
                 return null;
@@ -288,21 +288,21 @@ public class GameUtil {
      * @param y y坐标
      * @return 向左上终点的行列坐标，如果没有则返回null
      */
-    public static int[] checkTheUpperLeft(int x, int y) {
+    public static int[] checkTheUpperLeft(int x, int y, int[][] chessArr) {
         try {
             int r = -2, s = -2;
             int i, j;
             for (i = x - 1, j = y - 1; i >= 0 && j >= 0; i--, j--) {
-                if (GameParameter.chess[i][j] == 0) {
+                if (chessArr[i][j] == 0) {
                     break;
                 }
-                if (GameParameter.chess[i][j] == GameParameter.chess[x][y]) {
+                if (chessArr[i][j] == chessArr[x][y]) {
                     r = i;
                     s = j;
                     break;
                 }
             }
-            if (r != -2 && s != -2 && GameParameter.chess[x - 1][y - 1] != GameParameter.chess[i][j]) {
+            if (r != -2 && s != -2 && chessArr[x - 1][y - 1] != chessArr[i][j]) {
                 return new int[]{r, s};
             } else {
                 return null;
@@ -319,21 +319,21 @@ public class GameUtil {
      * @param y y坐标
      * @return 向左下终点的行列坐标，如果没有则返回null
      */
-    public static int[] checkTheBottomLeft(int x, int y) {
+    public static int[] checkTheBottomLeft(int x, int y, int[][] chessArr) {
         try {
             int r = -2, s = -2;
             int i, j;
             for (i = x - 1, j = y + 1; i >= 0 && j < GameParameter.cols - 1; i--, j++) {
-                if (GameParameter.chess[i][j] == 0) {
+                if (chessArr[i][j] == 0) {
                     break;
                 }
-                if (GameParameter.chess[i][j] == GameParameter.chess[x][y]) {
+                if (chessArr[i][j] == chessArr[x][y]) {
                     r = i;
                     s = j;
                     break;
                 }
             }
-            if (r != -2 && s != -2 && GameParameter.chess[x - 1][y + 1] != GameParameter.chess[i][j]) {
+            if (r != -2 && s != -2 && chessArr[x - 1][y + 1] != chessArr[i][j]) {
                 return new int[]{r, s};
             } else {
                 return null;
@@ -352,19 +352,19 @@ public class GameUtil {
      * @param c2 结束纵坐标
      * @return 改变的个数
      */
-    public static int paintChessLine(int r1, int c1, int r2, int c2) {
+    public static int paintChessLine(int r1, int c1, int r2, int c2, int[][] chessArr) {
         int change = 0;
         // 横向
         if (c1 == c2) {
             for (int k = Math.min(r1, r2) + 1; k < Math.max(r1, r2); k++) {
-                GameParameter.chess[k][c1] = GameParameter.chess[r1][c1];
+                chessArr[k][c1] = chessArr[r1][c1];
                 change++;
             }
         }
         // 纵向
         if (r1 == r2) {
             for (int k = Math.min(c1, c2) + 1; k < Math.max(c1, c2); k++) {
-                GameParameter.chess[r1][k] = GameParameter.chess[r1][c1];
+                chessArr[r1][k] = chessArr[r1][c1];
                 change++;
             }
         }
@@ -380,10 +380,10 @@ public class GameUtil {
      * @param c2 结束纵坐标
      * @return 改变的个数
      */
-    public static int paintChessUpperRight(int r1, int c1, int r2, int c2) {
+    public static int paintChessUpperRight(int r1, int c1, int r2, int c2, int[][] chessArr) {
         int change = 0;
         for (int k = Math.min(r1, r2) + 1, v = Math.max(c1, c2) - 1; k < Math.max(r1, r2); k++, v--) {
-            GameParameter.chess[k][v] = GameParameter.chess[r1][c1];
+            chessArr[k][v] = chessArr[r1][c1];
             change++;
         }
         return change;
@@ -398,10 +398,10 @@ public class GameUtil {
      * @param c2 结束纵坐标
      * @return 改变的个数
      */
-    public static int paintChessBottomRight(int r1, int c1, int r2, int c2) {
+    public static int paintChessBottomRight(int r1, int c1, int r2, int c2, int[][] chessArr) {
         int change = 0;
         for (int k = Math.min(r1, r2) + 1, v = Math.min(c1, c2) + 1; k < Math.max(r1, r2); k++, v++) {
-            GameParameter.chess[k][v] = GameParameter.chess[r1][c1];
+            chessArr[k][v] = chessArr[r1][c1];
             change++;
         }
         return change;
@@ -416,10 +416,10 @@ public class GameUtil {
      * @param c2 结束纵坐标
      * @return 改变的个数
      */
-    public static int paintChessUpperLeft(int r1, int c1, int r2, int c2) {
+    public static int paintChessUpperLeft(int r1, int c1, int r2, int c2, int[][] chessArr) {
         int change = 0;
         for (int k = Math.max(r1, r2) - 1, v = Math.max(c1, c2) - 1; k > Math.min(r1, r2); k--, v--) {
-            GameParameter.chess[k][v] = GameParameter.chess[r1][c1];
+            chessArr[k][v] = chessArr[r1][c1];
             change++;
         }
         return change;
@@ -434,10 +434,10 @@ public class GameUtil {
      * @param c2 结束纵坐标
      * @return 改变的个数
      */
-    public static int paintChessBottomLeft(int r1, int c1, int r2, int c2) {
+    public static int paintChessBottomLeft(int r1, int c1, int r2, int c2, int[][] chessArr) {
         int change = 0;
         for (int k = Math.min(r1, r2) + 1, v = Math.max(c1, c2) - 1; k <= Math.max(r1, r2); k++, v--) {
-            GameParameter.chess[k][v] = GameParameter.chess[r1][c1];
+            chessArr[k][v] = chessArr[r1][c1];
             change++;
         }
         return change;
@@ -450,72 +450,72 @@ public class GameUtil {
      * @param col 棋子列坐标
      * @return 棋盘变化状态对象
      */
-    public static ChessChange getChessChange(int row, int col) {
+    public static ChessChange getChessChange(int row, int col, int[][] chessArr) {
         boolean isChangeState = false; // 判断是否改变棋子状态
         // 改变棋子数目
         int changeCount = 0;
         int[] arr = null;
         // 向上检测
-        arr = checkTheUp(row, col);
+        arr = checkTheUp(row, col, chessArr);
         if (arr != null) {
             // 改变棋子颜色
-            int count = paintChessLine(row, col, arr[0], arr[1]);
+            int count = paintChessLine(row, col, arr[0], arr[1], chessArr);
             changeCount += count;
             isChangeState = true;
         }
         // 向下检测
-        arr = checkTheDown(row, col);
+        arr = checkTheDown(row, col, chessArr);
         if (arr != null) {
             // 改变棋子颜色
-            int count = paintChessLine(row, col, arr[0], arr[1]);
+            int count = paintChessLine(row, col, arr[0], arr[1], chessArr);
             changeCount += count;
             isChangeState = true;
         }
         // 向左检测
-        arr = checkTheLeft(row, col);
+        arr = checkTheLeft(row, col, chessArr);
         if (arr != null) {
             // 改变棋子颜色
-            int count = paintChessLine(row, col, arr[0], arr[1]);
+            int count = paintChessLine(row, col, arr[0], arr[1], chessArr);
             changeCount += count;
             isChangeState = true;
         }
         // 向右检测
-        arr = checkTheRight(row, col);
+        arr = checkTheRight(row, col, chessArr);
         if (arr != null) {
             // 改变棋子颜色
-            int count = paintChessLine(row, col, arr[0], arr[1]);
+            int count = paintChessLine(row, col, arr[0], arr[1], chessArr);
             changeCount += count;
             isChangeState = true;
         }
         // 左上检测
-        arr = checkTheUpperLeft(row, col);
+        arr = checkTheUpperLeft(row, col, chessArr);
         if (arr != null) {
             // 改变棋子颜色
-            int count = paintChessUpperLeft(row, col, arr[0], arr[1]);
+            int count = paintChessUpperLeft(row, col, arr[0], arr[1], chessArr);
             changeCount += count;
             isChangeState = true;
         }
         // 右上检测
-        arr = checkTheUpperRight(row, col);
+        arr = checkTheUpperRight(row, col, chessArr);
         if (arr != null) {
             // 改变棋子颜色
-            int count = paintChessUpperRight(row, col, arr[0], arr[1]);
+            int count = paintChessUpperRight(row, col, arr[0], arr[1], chessArr);
             changeCount += count;
             isChangeState = true;
         }
         // 左下检测
-        arr = checkTheBottomLeft(row, col);
+        arr = checkTheBottomLeft(row, col, chessArr);
         if (arr != null) {
             // 改变棋子颜色
-            int count = paintChessBottomLeft(row, col, arr[0], arr[1]);
+            int count = paintChessBottomLeft(row, col, arr[0], arr[1], chessArr);
             changeCount += count;
             isChangeState = true;
         }
         // 右下检测
-        arr = checkTheBottomRight(row, col);
+        arr = checkTheBottomRight(row, col, chessArr);
         if (arr != null) {
             // 改变棋子颜色
-            int count = paintChessBottomRight(row, col, arr[0], arr[1]);
+            int count = paintChessBottomRight(row, col, arr[0], arr[1], chessArr);
             changeCount += count;
             isChangeState = true;
         }
