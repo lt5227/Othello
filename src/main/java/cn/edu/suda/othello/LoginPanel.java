@@ -109,4 +109,8 @@ public class LoginPanel extends JPanel {
     public void addStartButtonActionListener(ActionListener actionListener){
         startButton.addActionListener(actionListener);
     }
+
+    public NameAndIpPanel getNameAndIpPanel() {
+        return nameAndIpPanel;
+    }
 }

@@ -4,11 +4,13 @@ package cn.edu.suda.othello.listener;
 import cn.edu.suda.othello.ChessPanel;
 import cn.edu.suda.othello.GameParameter;
 import cn.edu.suda.othello.LoginPanel;
+import cn.edu.suda.othello.NameAndIpPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -47,6 +49,16 @@ public class StartGameActionListener implements ActionListener {
             case 3: {
                 // 联机模式
                 logger.info("联机模式游戏开始");
+                // 昵称和IP输入面板
+                NameAndIpPanel nameAndIpPanel = loginPanel.getNameAndIpPanel();
+                // 获取昵称输入框和IP输入框
+                JTextField nameTextField = nameAndIpPanel.getNameTextField();
+                JTextField ipTextField = nameAndIpPanel.getIpTextField();
+                String name = nameTextField.getText();
+                String ip = ipTextField.getText();
+                System.out.println(name);
+                System.out.println(ip);
+
             }
             break;
             default: {
