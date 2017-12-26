@@ -11,6 +11,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * 关于Spring boot + Swing 开发的简单配置参考：
@@ -47,6 +50,22 @@ public class OthelloApplication extends JFrame {
         gl.setAutoCreateContainerGaps(true);
         gl.setHorizontalGroup(gl.createSequentialGroup().addComponent(arg[0]));
         gl.setVerticalGroup(gl.createSequentialGroup().addComponent(arg[0]));
+    }
+
+    private void startServer() {
+        /*
+         * 创建ServerSocket的同时需要申请服务端口
+		 * 这个端口不能与其他使用TCP协议的应用程序
+		 * 冲突，否则会抛出异常。
+		 */
+        try {
+            final ServerSocket serverSocket = new ServerSocket(9527);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "本程序禁止重复运行，只能同时存在一个实例。"
+                    , "你敢重复运行？", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
     }
 
     public static void main(String[] args) {

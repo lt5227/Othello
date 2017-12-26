@@ -1,6 +1,7 @@
 package cn.edu.suda.othello.listener;
 
 
+import cn.edu.suda.OthelloApplication;
 import cn.edu.suda.othello.ChessPanel;
 import cn.edu.suda.othello.GameParameter;
 import cn.edu.suda.othello.LoginPanel;
@@ -13,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
 
 /**
  * Copyright 2017 济中节能 All rights reserved.
@@ -56,9 +59,41 @@ public class StartGameActionListener implements ActionListener {
                 JTextField ipTextField = nameAndIpPanel.getIpTextField();
                 String name = nameTextField.getText();
                 String ip = ipTextField.getText();
-                System.out.println(name);
-                System.out.println(ip);
+                // 判断昵称和IP是否输入
+                if (name == null || "".equals(name)) {
+                    JOptionPane.showMessageDialog(loginPanel, "请输入昵称");
+                    return;
+                }
+                if (ip == null || "".equals(ip)) {
+                    JOptionPane.showMessageDialog(loginPanel, "请输入对家IP地址");
+                    return;
+                }
+                // 判断对家IP是否输入正确 https://www.cnblogs.com/helloshrek/p/6018902.html
+                String reg = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
 
+                        + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+
+                        + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+
+                        + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
+                if (!ip.matches(reg)) {
+                    JOptionPane.showMessageDialog(loginPanel, "输入的IP地址不正确，请重新输入！");
+                    return;
+                }
+                // 输入昵称和对方IP
+                logger.info("昵称：{},对方IP：{}", name, ip);
+                // 获取主窗体实例对象
+                OthelloApplication othelloApplication = (OthelloApplication) loginPanel.getParent().getParent();
+                // 创建Socket连接对家主机
+                try {
+                    Socket socket = new Socket(ip, 9527);
+                    if (socket.isConnected()){
+
+                    }
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog(loginPanel, "对方主机无法连接");
+                }
             }
             break;
             default: {

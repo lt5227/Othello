@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.net.Socket;
 
 /**
  * Copyright 2017 济中节能 All rights reserved.
@@ -18,6 +19,9 @@ public class LoginPanel extends JPanel {
     private JRadioButton radioButton3; // 联机模式单选
     private NameAndIpPanel nameAndIpPanel; // 昵称及IP面板
     private JButton startButton; // 开始按钮
+
+    // Socket对象
+    private Socket socket;
 
     private static final Logger logger = LoggerFactory.getLogger(LoginPanel.class);
 
@@ -106,11 +110,19 @@ public class LoginPanel extends JPanel {
         this.add(startButton, gridBagConstraints);
     }
 
-    public void addStartButtonActionListener(ActionListener actionListener){
+    public void addStartButtonActionListener(ActionListener actionListener) {
         startButton.addActionListener(actionListener);
     }
 
     public NameAndIpPanel getNameAndIpPanel() {
         return nameAndIpPanel;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
     }
 }
