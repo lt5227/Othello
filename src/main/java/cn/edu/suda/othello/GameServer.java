@@ -3,6 +3,7 @@ package cn.edu.suda.othello;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -13,17 +14,15 @@ import java.net.ServerSocket;
  * Copyright 2017 济中节能 All rights reserved.
  * Created by LiLei on 2017/12/25 11:46.
  */
-@Component
 public class GameServer {
-    private ServerSocket serverSocket;
-    @Autowired
     private LoginPanel loginPanel;
-    @Autowired
     private ChessPanel chessPanel;
 
     private static final Logger logger = LoggerFactory.getLogger(GameServer.class);
 
-    public GameServer() {
+    public GameServer(LoginPanel loginPanel, ChessPanel chessPanel) {
+        this.loginPanel = loginPanel;
+        this.chessPanel = chessPanel;
         // 启动服务监听程序
         this.startServer();
     }
@@ -38,6 +37,7 @@ public class GameServer {
             final ServerSocket serverSocket = new ServerSocket(9527);
             logger.info("启动服务监听，监听端口9527");
             // 创建接收信息的线程
+            new ReceiveThread(serverSocket, loginPanel, chessPanel).start();
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(loginPanel, "本程序禁止重复运行，只能同时存在一个实例。"

@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -87,8 +86,8 @@ public class StartGameActionListener implements ActionListener {
                 // 创建Socket连接对家主机
                 try {
                     Socket socket = new Socket(ip, 9527);
-                    if (socket.isConnected()){
-
+                    if (socket.isConnected()) {
+                        chessPanel.setSocket(socket);
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();

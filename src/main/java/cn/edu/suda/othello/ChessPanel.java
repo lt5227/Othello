@@ -2,6 +2,7 @@ package cn.edu.suda.othello;
 
 import cn.edu.suda.othello.listener.ChessListener;
 import cn.edu.suda.othello.listener.OnePlayerChessListener;
+import cn.edu.suda.othello.listener.OnlineChessListener;
 import cn.edu.suda.othello.listener.TwoPlayersChessListener;
 import cn.edu.suda.othello.util.pojo.Coordinate;
 import org.slf4j.Logger;
@@ -10,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Copyright 2017 济中节能 All rights reserved.
@@ -30,6 +33,8 @@ public class ChessPanel extends JPanel {
     private static final JLabel whiteCountLabel = new JLabel("2"); // 白棋个数
     private static final JLabel record = new JLabel("阿狸下"); // 当前下棋的人 默认黑棋先下
     private static Coordinate position;
+    private Socket socket;
+    private ServerSocket serverSocket;
 
     private static final Logger logger = LoggerFactory.getLogger(ChessPanel.class);
 
@@ -127,6 +132,7 @@ public class ChessPanel extends JPanel {
             break;
             case 3: {
                 logger.info("实例化联机模式监听器");
+                listener = new OnlineChessListener(g, record, blackCountLabel, whiteCountLabel, this, socket, serverSocket);
             }
             break;
         }
@@ -193,5 +199,21 @@ public class ChessPanel extends JPanel {
 
     public static void setPosition(Coordinate position) {
         ChessPanel.position = position;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
     }
 }

@@ -1,11 +1,13 @@
 package cn.edu.suda;
 
 import cn.edu.suda.othello.ChessPanel;
+import cn.edu.suda.othello.GameServer;
 import cn.edu.suda.othello.LoginPanel;
 import cn.edu.suda.othello.NameAndIpPanel;
 import cn.edu.suda.othello.listener.StartGameActionListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Copyright 2017 济中节能 All rights reserved.
@@ -16,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfig {
 
     @Bean
-    public NameAndIpPanel nameAndIpPanel(){
+    public NameAndIpPanel nameAndIpPanel() {
         return new NameAndIpPanel();
     }
 
@@ -26,12 +28,18 @@ public class BeanConfig {
     }
 
     @Bean
-    public ChessPanel chessPanel(){
+    public ChessPanel chessPanel() {
         return new ChessPanel();
     }
 
     @Bean
-    public StartGameActionListener startGameActionListener(LoginPanel loginPanel,ChessPanel chessPanel){
-        return new StartGameActionListener(loginPanel,chessPanel);
+    public StartGameActionListener startGameActionListener(LoginPanel loginPanel, ChessPanel chessPanel) {
+        return new StartGameActionListener(loginPanel, chessPanel);
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public GameServer gameServer(LoginPanel loginPanel, ChessPanel chessPanel) {
+        return new GameServer(loginPanel, chessPanel);
     }
 }
