@@ -55,7 +55,7 @@ public class ReceiveThread extends Thread {
                         ChessListener.setState(-1); // 设置游戏棋子状态
                         chessPanel.addChessListen(); // 添加棋盘监听程序
                         MouseListener[] mouseListeners = chessPanel.getMouseListeners();
-                        socketUtil.setSocket(socket);
+                        socketUtil.setSocket(socket); // 设置Socket工具类
                         break;
                     }
                 }

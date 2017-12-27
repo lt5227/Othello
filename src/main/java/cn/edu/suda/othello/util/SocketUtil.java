@@ -27,7 +27,6 @@ public class SocketUtil {
             BufferedOutputStream bos = new BufferedOutputStream(os);
             oos = new ObjectOutputStream(bos);
             oos.writeObject(coordinate);
-            oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
