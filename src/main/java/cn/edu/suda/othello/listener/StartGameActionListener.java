@@ -3,7 +3,6 @@ package cn.edu.suda.othello.listener;
 
 import cn.edu.suda.OthelloApplication;
 import cn.edu.suda.othello.*;
-import cn.edu.suda.othello.util.SocketUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
