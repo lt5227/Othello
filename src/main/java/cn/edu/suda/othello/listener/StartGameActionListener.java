@@ -87,7 +87,7 @@ public class StartGameActionListener implements ActionListener {
                 OthelloApplication othelloApplication = (OthelloApplication) loginPanel.getParent().getParent();
                 // 创建Socket连接对家主机
                 try {
-                    socket = new Socket(ip, 9527);
+                    socket = new Socket(ip, 9530);
                     if (socket.isConnected()) {
                         // 如果连接成功，接收UserBean信息
                         chessPanel.setSocket(socket);

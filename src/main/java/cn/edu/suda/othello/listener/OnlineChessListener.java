@@ -45,31 +45,37 @@ public class OnlineChessListener extends ChessListener {
         x1 = event.getX();
         y1 = event.getY();
         Coordinate coordinate = GameUtil.getChessCoordinate(x1, y1);
+        // 获取下法
+        int[][] dismount = GameParameter.dismount;
         if (coordinate != null) {
-            if (GameParameter.isServer) {
-                // 服务端 服务端为白棋
-                if (ChessListener.state == -1) {
-                    // 发送下棋信息
-                    socketUtil.sendUserBean(coordinate);
-                } else {
-                    JOptionPane.showMessageDialog(null, "请等待对方下棋~");
-                    return;
-                }
+            if (dismount[coordinate.getX()][coordinate.getY()] == 0) {
+                JOptionPane.showMessageDialog(null, "此处不能落子！~");
             } else {
-                // 客户端 客户端为黑棋
-                if (ChessListener.state == 1) {
-                    // 发送下棋信息
-                    socketUtil.sendUserBean(coordinate);
+                if (GameParameter.isServer) {
+                    // 服务端 服务端为白棋
+                    if (ChessListener.state == -1) {
+                        // 发送下棋信息
+                        socketUtil.sendUserBean(coordinate);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "请等待对方下棋~");
+                        return;
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "请等待对方下棋~");
-                    return;
+                    // 客户端 客户端为黑棋
+                    if (ChessListener.state == 1) {
+                        // 发送下棋信息
+                        socketUtil.sendUserBean(coordinate);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "请等待对方下棋~");
+                        return;
+                    }
                 }
+                // 检查游戏状态
+                super.checkGameState(coordinate, GameParameter.chess, logger);
+                // 设置下棋位置
+                ChessPanel.setPosition(coordinate);
+                chess.update(g);
             }
-            // 检查游戏状态
-            super.checkGameState(coordinate, GameParameter.chess, logger);
-            // 设置下棋位置
-            ChessPanel.setPosition(coordinate);
-            chess.update(g);
         }
 
     }

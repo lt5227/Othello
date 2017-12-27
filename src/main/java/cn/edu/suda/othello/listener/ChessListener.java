@@ -46,7 +46,7 @@ public abstract class ChessListener extends MouseAdapter {
      * @param logger   日志记录对象
      * @return 下法坐标集合
      */
-    public List<Coordinate> checkGameState(Coordinate coordinate, int[][] chessArr, Logger logger) {
+    public synchronized List<Coordinate> checkGameState(Coordinate coordinate, int[][] chessArr, Logger logger) {
         // 下法坐标集合
         List<Coordinate> dismountList = null;
         if (coordinate != null) {
