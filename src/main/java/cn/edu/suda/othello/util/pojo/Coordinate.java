@@ -35,4 +35,12 @@ public class Coordinate implements Serializable {
     public void setY(Integer y) {
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+        return "Coordinate{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
