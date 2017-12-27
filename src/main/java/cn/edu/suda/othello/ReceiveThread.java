@@ -1,5 +1,9 @@
 package cn.edu.suda.othello;
 
+import cn.edu.suda.othello.listener.ChessListener;
+import cn.edu.suda.othello.listener.OnlineChessListener;
+import cn.edu.suda.othello.util.SocketUtil;
+import cn.edu.suda.othello.util.pojo.Coordinate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +22,7 @@ public class ReceiveThread extends Thread {
     private final ServerSocket serverSocket;
     private final LoginPanel loginPanel;
     private final ChessPanel chessPanel;
+    private final SocketUtil socketUtil = new SocketUtil();
 
     private static final Logger logger = LoggerFactory.getLogger(ReceiveThread.class);
 
@@ -47,8 +52,10 @@ public class ReceiveThread extends Thread {
                         GameParameter.setIsServer(true); // 设置游戏服务端
                         chessPanel.setServerSocket(serverSocket);
                         chessPanel.setSocket(socket);
+                        ChessListener.setState(-1); // 设置游戏棋子状态
                         chessPanel.addChessListen(); // 添加棋盘监听程序
                         MouseListener[] mouseListeners = chessPanel.getMouseListeners();
+                        socketUtil.setSocket(socket);
                         break;
                     }
                 }
@@ -56,11 +63,12 @@ public class ReceiveThread extends Thread {
                 e.printStackTrace();
             }
         }
-        Graphics g = chessPanel.getGraphics();
-
         while (true) {
             // 接收下棋状态
-
+            Coordinate coordinate = socketUtil.receiveUserBean();
+            if (coordinate != null){
+                System.out.println(coordinate);
+            }
         }
     }
 }

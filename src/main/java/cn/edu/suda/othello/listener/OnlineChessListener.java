@@ -49,7 +49,7 @@ public class OnlineChessListener extends ChessListener {
             } else {
                 if (GameParameter.isServer) {
                     // 服务端 服务端为白棋
-                    if (GameParameter.type == -1) {
+                    if (ChessListener.state == -1) {
                         // 发送下棋信息
                         socketUtil.sendUserBean(coordinate);
                     } else {
@@ -58,9 +58,9 @@ public class OnlineChessListener extends ChessListener {
                     }
                 } else {
                     // 客户端 客户端为黑棋
-                    if (GameParameter.type == 1) {
+                    if (ChessListener.state == 1) {
                         // 发送下棋信息
-
+                        socketUtil.sendUserBean(coordinate);
                     } else {
                         JOptionPane.showMessageDialog(null, "请等待对方下棋~");
                         return;
