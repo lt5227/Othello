@@ -7,7 +7,8 @@ import java.io.Serializable;
  * Created by LiLei on 2017/12/20 16:31.
  * 棋盘坐标对象
  */
-public class Coordinate implements Serializable{
+public class Coordinate implements Serializable {
+    private static final long serialVersionUID = 4896210274414787459L;
     private Integer x; // X坐标
     private Integer y; // Y坐标
 
