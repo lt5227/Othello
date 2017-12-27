@@ -22,8 +22,6 @@ import java.net.Socket;
 public class StartGameActionListener implements ActionListener {
     @Autowired
     private UserBean userBean;
-    @Autowired
-    private SocketUtil socketUtil;
 
     private final LoginPanel loginPanel;
     private final ChessPanel chessPanel;
@@ -91,7 +89,6 @@ public class StartGameActionListener implements ActionListener {
                     Socket socket = new Socket(ip, 9530);
                     if (socket.isConnected()) {
                         // 如果连接成功，接收UserBean信息
-                        socketUtil.setSocket(socket); // 设置Socket工具类
                         chessPanel.setSocket(socket);
                         loginPanel.setVisible(false); // 开始游戏隐藏登录面板
                     }

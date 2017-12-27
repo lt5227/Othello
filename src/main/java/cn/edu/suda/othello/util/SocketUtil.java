@@ -2,7 +2,6 @@ package cn.edu.suda.othello.util;
 
 import cn.edu.suda.othello.UserBean;
 import cn.edu.suda.othello.util.pojo.Coordinate;
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -22,12 +21,13 @@ public class SocketUtil {
      * @param coordinate 用户信息对象
      */
     public void sendUserBean(Coordinate coordinate) {
+        ObjectOutputStream oos;
         try {
-            OutputStream out = socket.getOutputStream();
-            OutputStreamWriter osw = new OutputStreamWriter(out, "UTF-8");
-            PrintWriter pw = new PrintWriter(osw, true);
-            String message = JSONObject.toJSONString(coordinate);
-            pw.println(message);
+            OutputStream os = socket.getOutputStream();
+            BufferedOutputStream bos = new BufferedOutputStream(os);
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(coordinate);
+            oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,13 +39,14 @@ public class SocketUtil {
      * @return 用户信息对象
      */
     public Coordinate receiveUserBean() {
+        ObjectInputStream ois;
         try {
-            InputStream in = socket.getInputStream();
-            InputStreamReader isr = new InputStreamReader(in,"UTF-8");
-            BufferedReader br = new BufferedReader(isr);
-            String message = null;
-            while((message = br.readLine())!=null){
-                System.out.println(message);
+            InputStream is = socket.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            ois = new ObjectInputStream(bis);
+            Coordinate coordinate = (Coordinate) ois.readObject();
+            if (coordinate != null) {
+                return coordinate;
             }
         } catch (Exception e) {
             e.printStackTrace();

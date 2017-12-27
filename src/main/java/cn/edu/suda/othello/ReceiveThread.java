@@ -22,7 +22,6 @@ public class ReceiveThread extends Thread {
     private final ServerSocket serverSocket;
     private final LoginPanel loginPanel;
     private final ChessPanel chessPanel;
-    private final SocketUtil socketUtil = new SocketUtil();
 
     private static final Logger logger = LoggerFactory.getLogger(ReceiveThread.class);
 
@@ -55,7 +54,6 @@ public class ReceiveThread extends Thread {
                         ChessListener.setState(-1); // 设置游戏棋子状态
                         chessPanel.addChessListen(); // 添加棋盘监听程序
                         MouseListener[] mouseListeners = chessPanel.getMouseListeners();
-                        socketUtil.setSocket(socket); // 设置Socket工具类
                         break;
                     }
                 }
@@ -65,8 +63,9 @@ public class ReceiveThread extends Thread {
         }
         while (true) {
             // 接收下棋状态
+            SocketUtil socketUtil = chessPanel.getSocketUtil();
             Coordinate coordinate = socketUtil.receiveUserBean();
-            if (coordinate != null){
+            if (coordinate != null) {
                 System.out.println(coordinate);
             }
         }

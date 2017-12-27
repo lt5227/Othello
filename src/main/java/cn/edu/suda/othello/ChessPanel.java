@@ -222,4 +222,8 @@ public class ChessPanel extends JPanel {
     public void setServerSocket(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
+
+    public SocketUtil getSocketUtil() {
+        return socketUtil;
+    }
 }
