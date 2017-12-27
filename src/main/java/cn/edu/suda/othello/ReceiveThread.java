@@ -68,6 +68,7 @@ public class ReceiveThread extends Thread {
             SocketUtil socketUtil = chessPanel.getSocketUtil();
             Coordinate coordinate = socketUtil.receiveUserBean();
             if (coordinate != null) {
+                ChessListener.setState(1); // 设置游戏棋子状态
                 // 更新下棋状态
                 chessListener.checkGameState(coordinate,GameParameter.chess, logger);
                 // 设置下棋位置
