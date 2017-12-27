@@ -4,9 +4,11 @@ import cn.edu.suda.othello.listener.ChessListener;
 import cn.edu.suda.othello.listener.OnePlayerChessListener;
 import cn.edu.suda.othello.listener.OnlineChessListener;
 import cn.edu.suda.othello.listener.TwoPlayersChessListener;
+import cn.edu.suda.othello.util.SocketUtil;
 import cn.edu.suda.othello.util.pojo.Coordinate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +22,10 @@ import java.net.Socket;
  * 棋盘面板
  */
 public class ChessPanel extends JPanel {
+    @Autowired
+    private UserBean userBean;
+    @Autowired
+    private SocketUtil socketUtil;
 
     public final static int x = 79; // 棋盘初始点横坐标
     public final static int y = 83; // 棋盘初始点纵坐标
@@ -132,7 +138,7 @@ public class ChessPanel extends JPanel {
             break;
             case 3: {
                 logger.info("实例化联机模式监听器");
-                listener = new OnlineChessListener(g, record, blackCountLabel, whiteCountLabel, this, socket, serverSocket);
+                listener = new OnlineChessListener(g, record, blackCountLabel, whiteCountLabel, this, socket, serverSocket, userBean, socketUtil);
             }
             break;
         }

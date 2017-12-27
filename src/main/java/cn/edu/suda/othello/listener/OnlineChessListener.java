@@ -2,7 +2,9 @@ package cn.edu.suda.othello.listener;
 
 import cn.edu.suda.othello.ChessPanel;
 import cn.edu.suda.othello.GameParameter;
+import cn.edu.suda.othello.UserBean;
 import cn.edu.suda.othello.util.GameUtil;
+import cn.edu.suda.othello.util.SocketUtil;
 import cn.edu.suda.othello.util.pojo.Coordinate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +23,16 @@ public class OnlineChessListener extends ChessListener {
     private static final Logger logger = LoggerFactory.getLogger(OnlineChessListener.class);
     private Socket socket;
     private ServerSocket serverSocket;
+    private UserBean userBean;
+    private SocketUtil socketUtil;
 
-    public OnlineChessListener(Graphics g, JLabel record, JLabel blackCountLabel, JLabel whiteCountLabel, ChessPanel chess, Socket socket, ServerSocket serverSocket) {
+    public OnlineChessListener(Graphics g, JLabel record, JLabel blackCountLabel, JLabel whiteCountLabel,
+                               ChessPanel chess, Socket socket, ServerSocket serverSocket, UserBean userBean, SocketUtil socketUtil) {
         super(g, record, blackCountLabel, whiteCountLabel, chess);
         this.serverSocket = serverSocket;
         this.socket = socket;
+        this.userBean = userBean;
+        this.serverSocket = serverSocket;
     }
 
     // 点击下棋棋子
@@ -35,6 +42,38 @@ public class OnlineChessListener extends ChessListener {
         x1 = event.getX();
         y1 = event.getY();
         Coordinate coordinate = GameUtil.getChessCoordinate(x1, y1);
+        if (coordinate != null) {
+            if (GameParameter.dismount[coordinate.getX()][coordinate.getY()] == 0) {
+                JOptionPane.showMessageDialog(null, "不能放子");
+            }
+        }
+        if (GameParameter.isServer) {
+            // 服务端 服务端为白棋
+            if (GameParameter.type == -1) {
+                while (true){
+                    UserBean user = socketUtil.receiveUserBean();
+                    if (userBean != null){
+                        userBean.update(user);
+                        break;
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "请等待对方下棋~");
+            }
+        } else {
+            // 客户端 客户端为黑棋
+            if (GameParameter.type == 1){
+                while (true){
+                    UserBean user = socketUtil.receiveUserBean();
+                    if (userBean != null){
+                        userBean.update(user);
+                        break;
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "请等待对方下棋~");
+            }
+        }
         // 检查游戏状态
         super.checkGameState(coordinate, GameParameter.chess, logger);
         // 设置下棋位置

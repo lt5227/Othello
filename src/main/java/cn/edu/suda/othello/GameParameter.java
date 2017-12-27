@@ -22,6 +22,7 @@ public class GameParameter {
     public final static int cols = 9; // 棋盘列数
     public final static int[][] chess = new int[rows - 1][cols - 1]; // 定义一个8*8的数组，用来保存棋子
     public final static int[][] dismount = new int[rows - 1][cols - 1];  // 定义一个8*8的数组，用来保存下法
+    public static boolean isServer = false;
     // 棋子位置估值表
     public final static int[][] valuationTable = {
             {90, -60, 10, 10, 10, 10, -60, 90},
@@ -66,5 +67,9 @@ public class GameParameter {
         result[0] = blackScore;
         result[1] = whiteScore;
         return result;
+    }
+
+    public static void setIsServer(boolean isServer) {
+        GameParameter.isServer = isServer;
     }
 }

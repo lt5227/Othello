@@ -2,10 +2,8 @@ package cn.edu.suda.othello.listener;
 
 
 import cn.edu.suda.OthelloApplication;
-import cn.edu.suda.othello.ChessPanel;
-import cn.edu.suda.othello.GameParameter;
-import cn.edu.suda.othello.LoginPanel;
-import cn.edu.suda.othello.NameAndIpPanel;
+import cn.edu.suda.othello.*;
+import cn.edu.suda.othello.util.SocketUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,11 @@ import java.net.Socket;
  */
 
 public class StartGameActionListener implements ActionListener {
+    @Autowired
+    private UserBean userBean;
+    @Autowired
+    private SocketUtil socketUtil;
+
     private final LoginPanel loginPanel;
     private final ChessPanel chessPanel;
 
@@ -85,9 +88,18 @@ public class StartGameActionListener implements ActionListener {
                 OthelloApplication othelloApplication = (OthelloApplication) loginPanel.getParent().getParent();
                 // 创建Socket连接对家主机
                 try {
-                    Socket socket = new Socket(ip, 9527);
+                    Socket socket = new Socket(ip, 9530);
                     if (socket.isConnected()) {
+                        // 如果连接成功，接收UserBean信息
+                        socketUtil.setSocket(socket); // 设置Socket工具类
+                        // 更新UserBean
+                        userBean.setName(name);
+                        userBean.setType(1);
+                        userBean.setSure(false);
+                        // 发送UserBean
+                        socketUtil.sendUserBean(userBean);
                         chessPanel.setSocket(socket);
+                        loginPanel.setVisible(false); // 开始游戏隐藏登录面板
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();

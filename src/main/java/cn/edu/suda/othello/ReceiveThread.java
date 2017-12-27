@@ -42,7 +42,9 @@ public class ReceiveThread extends Thread {
                         // 如果接受联机
                         GameParameter.setType(3); // 设置游戏模式为联机模式
                         loginPanel.setVisible(false);
+                        GameParameter.setIsServer(true); // 设置游戏服务端
                         chessPanel.setServerSocket(serverSocket);
+                        chessPanel.setSocket(socket);
                         chessPanel.addChessListen(); // 添加棋盘监听程序
                     }
                 }
