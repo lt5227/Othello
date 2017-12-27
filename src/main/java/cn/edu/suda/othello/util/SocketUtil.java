@@ -1,6 +1,7 @@
 package cn.edu.suda.othello.util;
 
 import cn.edu.suda.othello.UserBean;
+import cn.edu.suda.othello.util.pojo.Coordinate;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -17,14 +18,14 @@ public class SocketUtil {
     /**
      * 发送UserBean对象信息
      *
-     * @param userBean 用户信息对象
+     * @param coordinate 用户信息对象
      */
-    public void sendUserBean(UserBean userBean) {
+    public void sendUserBean(Coordinate coordinate) {
         try {
             OutputStream os = socket.getOutputStream();
             BufferedOutputStream bos = new BufferedOutputStream(os);
             ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(userBean);
+            oos.writeObject(coordinate);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,14 +36,14 @@ public class SocketUtil {
      *
      * @return 用户信息对象
      */
-    public UserBean receiveUserBean() {
+    public Coordinate receiveUserBean() {
         try {
             InputStream is = socket.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             ObjectInputStream ois = new ObjectInputStream(bis);
-            UserBean userBean = (UserBean) ois.readObject();
-            if (userBean != null) {
-                return userBean;
+            Coordinate coordinate = (Coordinate) ois.readObject();
+            if (coordinate != null) {
+                return coordinate;
             }
         } catch (Exception e) {
             e.printStackTrace();

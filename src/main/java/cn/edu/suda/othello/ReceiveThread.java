@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -46,11 +48,19 @@ public class ReceiveThread extends Thread {
                         chessPanel.setServerSocket(serverSocket);
                         chessPanel.setSocket(socket);
                         chessPanel.addChessListen(); // 添加棋盘监听程序
+                        MouseListener[] mouseListeners = chessPanel.getMouseListeners();
+                        break;
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        Graphics g = chessPanel.getGraphics();
+
+        while (true) {
+            // 接收下棋状态
+
         }
     }
 }

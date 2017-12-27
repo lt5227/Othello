@@ -25,6 +25,7 @@ public class OnlineChessListener extends ChessListener {
     private ServerSocket serverSocket;
     private UserBean userBean;
     private SocketUtil socketUtil;
+    private int count = 0;
 
     public OnlineChessListener(Graphics g, JLabel record, JLabel blackCountLabel, JLabel whiteCountLabel,
                                ChessPanel chess, Socket socket, ServerSocket serverSocket, UserBean userBean, SocketUtil socketUtil) {
@@ -46,39 +47,33 @@ public class OnlineChessListener extends ChessListener {
             if (GameParameter.dismount[coordinate.getX()][coordinate.getY()] == 0) {
                 JOptionPane.showMessageDialog(null, "不能放子");
             }
-        }
-        if (GameParameter.isServer) {
-            // 服务端 服务端为白棋
-            if (GameParameter.type == -1) {
-                while (true){
-                    UserBean user = socketUtil.receiveUserBean();
-                    if (userBean != null){
-                        userBean.update(user);
-                        break;
-                    }
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "请等待对方下棋~");
-            }
         } else {
-            // 客户端 客户端为黑棋
-            if (GameParameter.type == 1){
-                while (true){
-                    UserBean user = socketUtil.receiveUserBean();
-                    if (userBean != null){
-                        userBean.update(user);
-                        break;
-                    }
+            if (GameParameter.isServer) {
+                // 服务端 服务端为白棋
+                if (GameParameter.type == -1) {
+                    // 发送下棋信息
+                    socketUtil.sendUserBean(coordinate);
+                } else {
+                    JOptionPane.showMessageDialog(null, "请等待对方下棋~");
+                    return;
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "请等待对方下棋~");
+                // 客户端 客户端为黑棋
+                if (GameParameter.type == 1) {
+                    // 发送下棋信息
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "请等待对方下棋~");
+                    return;
+                }
             }
+            // 检查游戏状态
+            super.checkGameState(coordinate, GameParameter.chess, logger);
+            // 设置下棋位置
+            ChessPanel.setPosition(coordinate);
+            chess.update(g);
         }
-        // 检查游戏状态
-        super.checkGameState(coordinate, GameParameter.chess, logger);
-        // 设置下棋位置
-        ChessPanel.setPosition(coordinate);
-        chess.update(g);
+
     }
 
     public Socket getSocket() {

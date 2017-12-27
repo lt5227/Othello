@@ -92,12 +92,6 @@ public class StartGameActionListener implements ActionListener {
                     if (socket.isConnected()) {
                         // 如果连接成功，接收UserBean信息
                         socketUtil.setSocket(socket); // 设置Socket工具类
-                        // 更新UserBean
-                        userBean.setName(name);
-                        userBean.setType(1);
-                        userBean.setSure(false);
-                        // 发送UserBean
-                        socketUtil.sendUserBean(userBean);
                         chessPanel.setSocket(socket);
                         loginPanel.setVisible(false); // 开始游戏隐藏登录面板
                     }
