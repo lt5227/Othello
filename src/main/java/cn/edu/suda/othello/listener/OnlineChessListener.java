@@ -34,6 +34,7 @@ public class OnlineChessListener extends ChessListener {
         this.socket = socket;
         this.userBean = userBean;
         this.serverSocket = serverSocket;
+        this.socketUtil = socketUtil;
     }
 
     // 点击下棋棋子
