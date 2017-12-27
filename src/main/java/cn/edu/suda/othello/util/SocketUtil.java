@@ -21,23 +21,15 @@ public class SocketUtil {
      * @param coordinate 用户信息对象
      */
     public void sendUserBean(Coordinate coordinate) {
-        ObjectOutputStream oos = null;
+        ObjectOutputStream oos;
         try {
             OutputStream os = socket.getOutputStream();
             BufferedOutputStream bos = new BufferedOutputStream(os);
             oos = new ObjectOutputStream(bos);
             oos.writeObject(coordinate);
-            socket.shutdownOutput();
+            oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (oos != null) {
-                try {
-                    oos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
@@ -47,26 +39,17 @@ public class SocketUtil {
      * @return 用户信息对象
      */
     public Coordinate receiveUserBean() {
-        ObjectInputStream ois = null;
+        ObjectInputStream ois;
         try {
             InputStream is = socket.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             ois = new ObjectInputStream(bis);
             Coordinate coordinate = (Coordinate) ois.readObject();
-            socket.shutdownInput();
             if (coordinate != null) {
                 return coordinate;
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (ois != null) {
-                try {
-                    ois.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return null;
     }
