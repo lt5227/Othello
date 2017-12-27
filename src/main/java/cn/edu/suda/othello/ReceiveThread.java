@@ -34,6 +34,7 @@ public class ReceiveThread extends Thread {
     @Override
     public void run() {
         logger.info("后台监听服务线程启动");
+        OnlineChessListener chessListener;
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
@@ -54,6 +55,7 @@ public class ReceiveThread extends Thread {
                         ChessListener.setState(-1); // 设置游戏棋子状态
                         chessPanel.addChessListen(); // 添加棋盘监听程序
                         MouseListener[] mouseListeners = chessPanel.getMouseListeners();
+                        chessListener = (OnlineChessListener) mouseListeners[0];
                         break;
                     }
                 }
@@ -66,7 +68,11 @@ public class ReceiveThread extends Thread {
             SocketUtil socketUtil = chessPanel.getSocketUtil();
             Coordinate coordinate = socketUtil.receiveUserBean();
             if (coordinate != null) {
-                System.out.println(coordinate);
+                // 更新下棋状态
+                chessListener.checkGameState(coordinate,GameParameter.chess, logger);
+                // 设置下棋位置
+                ChessPanel.setPosition(coordinate);
+                chessListener.getChess().update(chessListener.getG());
             }
         }
     }
