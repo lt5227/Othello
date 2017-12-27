@@ -36,6 +36,7 @@ public class StartGameActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Socket socket = null;
         switch (GameParameter.type) {
             case 1: {
                 // 单人模式
@@ -86,11 +87,12 @@ public class StartGameActionListener implements ActionListener {
                 OthelloApplication othelloApplication = (OthelloApplication) loginPanel.getParent().getParent();
                 // 创建Socket连接对家主机
                 try {
-                    Socket socket = new Socket(ip, 9530);
+                    socket = new Socket(ip, 9530);
                     if (socket.isConnected()) {
                         // 如果连接成功，接收UserBean信息
                         chessPanel.setSocket(socket);
                         loginPanel.setVisible(false); // 开始游戏隐藏登录面板
+
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -104,5 +106,11 @@ public class StartGameActionListener implements ActionListener {
         }
         // 添加棋盘鼠标监听
         chessPanel.addChessListen();
+        if (GameParameter.type == 3) {
+            // 开启客户端接收线程
+            if (socket != null){
+                new Thread(new ClientReceiveThread(socket,loginPanel,chessPanel)).start();
+            }
+        }
     }
 }
